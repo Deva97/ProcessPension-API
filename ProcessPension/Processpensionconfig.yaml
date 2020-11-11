@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: processpensionconfig-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Processpensionconfig
+  template:
+    metadata:
+      labels:
+        app: Processpensionconfig
+    spec:
+      containers:
+      - name: processpensionrepos
+        image:  dnazureacr.azurecr.io/processpensionrepos:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: dsconfigsn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: processpensionconfig
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: Processpensionconfig
